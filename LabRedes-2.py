@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 from scipy.io.wavfile import read, write
 from scipy.fftpack import fft, fftfreq, ifft
 import numpy as np
+import wavio
+
 
 datos = read("handel.wav")
 rate = datos[0]
@@ -62,13 +64,17 @@ plt.show()
 
 # AUDIO DESPUES DE TRUNCADO
 plt.figure(4)
-fftinv = ifft(fft_fixed).real
-plt.plot(vector_tiempo, fftinv,'purple')
+fftinv = ifft(fft_fixed)
+fftinv2 = fftinv.real
+
+
+plt.plot(vector_tiempo, fftinv, 'purple')
 plt.title('Inversa de la transformada de Fourier truncada')
 plt.xlabel('Tiempo [s]')
 #plt.ylabel('aiuda')
 plt.show()
 
-write('handel_fftinv.wav', rate, fftinv)
+write('handel_fftinv_forma1.wav', rate, fftinv2)
+wavio.write("handel_inv_forma2.wav", fftinv, rate, sampwidth=3)
 
 print('Programa finalizado con éxito')
