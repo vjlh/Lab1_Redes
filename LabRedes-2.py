@@ -23,17 +23,22 @@ fft_norm = list(map(lambda x: x / n, fft_out))  # Se deberia escalar por n o por
 frq = fftfreq(n, dt)  # frecuencias de la transformada (eje x)
 
 
-# Obtension de la transformada filtrada
-maxfrq = np.max(fft_norm)
-filterfrq = np.abs(maxfrq * 0.15)
+factorTruncado = 0.15 # Al cambiar esto se selecciona el valor en porcentaje al rededor de la frecuencia de magnitud máxima
 
-print('La frecuencia de filtrado es')
-print(filterfrq)
+maxFrqIndex = np.argmax(fft_norm) # Índice frecuencia máxima
+filterfrq = frq[maxFrqIndex] # Frecuencia máxima
+deltaFrq = filterfrq*factorTruncado # Numero de divisiones de tiempo que corresponden a la proximidad de la frecuencia máxima
+
+limFrqInf = np.floor(filterfrq - deltaFrq)
+limFrqSup = np.floor(filterfrq + deltaFrq)
+
+
+print(f'La frecuencia central de filtrado es {filterfrq} de indice {maxFrqIndex}, se seleccionan las frecuencias entre {limFrqInf} y {limFrqSup} Hz')
 
 
 # FILTRACIÓN DEL 15% DE LAS FRECUENCIAS
 
-fft_fixed = list(map(lambda x: x if (x > filterfrq) else 0.0, np.abs(fft_norm)))
+fft_fixed = list(map(lambda x: 0 if (frq[x[0]] < limFrqInf or frq[x[0]] > limFrqSup) else x[1], enumerate(np.abs(fft_norm))))
 
 
 # AUDIO ORIGINAL
@@ -41,8 +46,8 @@ plt.figure(1)
 plt.plot(vector_tiempo, data,'blue')
 plt.title('Datos del audio original')
 plt.xlabel('Tiempo [s]')
-# plt.ylabel('aiuda')
-plt.show()
+plt.ylabel('Amplitud')
+#plt.show()
 
 # Transformada de Fourier
 
@@ -51,30 +56,28 @@ plt.plot(frq, np.abs(fft_norm), 'r')
 
 plt.title('Transformada de Fourier del audio')
 plt.xlabel('Frecuencia [Hz]')
-#plt.ylabel('amplitud')
-plt.show()
+plt.ylabel('|F(w)|')
+#plt.show()
 
 # Transformada truncada
 plt.figure(3)
 plt.plot(frq, np.abs(fft_fixed), 'g')
 plt.title('Transformada de Fourier truncada')
 plt.xlabel('Frecuencia [Hz]')
-#plt.ylabel('amplitud')
-plt.show()
+plt.ylabel('|F(w)|')
+#plt.show()
 
 # AUDIO DESPUES DE TRUNCADO
 plt.figure(4)
-fftinv = ifft(fft_fixed)
-fftinv2 = fftinv.real
-
+fftinv = ifft(fft_fixed).real
 
 plt.plot(vector_tiempo, fftinv, 'purple')
 plt.title('Inversa de la transformada de Fourier truncada')
 plt.xlabel('Tiempo [s]')
-#plt.ylabel('aiuda')
+plt.ylabel('Amplitud')
 plt.show()
 
-write('handel_fftinv_forma1.wav', rate, fftinv2)
+#write('handel_fftinv_forma1.wav', rate, fftinv2)
 wavio.write("handel_inv_forma2.wav", fftinv, rate, sampwidth=3)
 
 print('Programa finalizado con éxito')
