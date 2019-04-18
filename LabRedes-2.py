@@ -52,7 +52,7 @@ plt.ylabel('Amplitud')
 plt.figure(2)
 plt.plot(frq, np.abs(fft_norm), 'r')
 
-plt.title('Transformada de Fourier')
+plt.title('Transformada de Fourier del audio')
 plt.xlabel('Frecuencia [Hz]')
 plt.ylabel('|F(w)|')
 #plt.show()
@@ -69,10 +69,10 @@ plt.ylabel('Amplitud')
 # Transformada truncada
 plt.figure(4)
 plt.plot(frq, np.abs(fft_fixed), 'g')
-plt.title('Transformada de Fourier truncada')
+plt.title('Transformada de Fourier Truncada')
 plt.xlabel('Frecuencia [Hz]')
 plt.ylabel('|F(w)|')
-#plt.show()
+plt.show()
 
 # Audio transformada inversa truncada
 plt.figure(5)
@@ -83,7 +83,7 @@ plt.xlabel('Tiempo [s]')
 plt.ylabel('Amplitud')
 plt.show()
 
-# write('handel_fftinv_forma1.wav', rate, fftinv) # Método 1 escritura en .wav
 wavio.write("handel_inversa_fixed.wav", fftinv, frate, sampwidth=3) # Metodo 2 escritura en .wav
+write('handel_fftinv_forma1.wav', frate, fftinv)
 
 print('Programa finalizado con éxito')
