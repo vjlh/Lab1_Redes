@@ -26,7 +26,7 @@ fft_norm = fft_out
 #fft_norm = list(map(lambda x: x/n, fft_out))  # Se deberia escalar por n o por n/2?
 
 
-deltaFrq = 0.1 # Al cambiar esto se seleccionan las frecuencias al rededor de la frecuencia de magnitud máxima
+deltaFrq = 0.1 # Al cambiar esto se seleccionan las frecuencias alrededor de la frecuencia de magnitud máxima
 
 maxFrqIndex = np.argmax(fft_norm) # Índice frecuencia máxima
 filterfrq = frq[maxFrqIndex] # Frecuencia máxima
@@ -83,7 +83,7 @@ plt.xlabel('Tiempo [s]')
 plt.ylabel('Amplitud')
 plt.show()
 
-wavio.write("handel_inversa_fixed.wav", fftinv, frate, sampwidth=3) # Metodo 2 escritura en .wav
-write('handel_fftinv_forma1.wav', frate, fftinv)
+wavio.write("handel_inversa_1.wav", fftinv, frate, sampwidth=3) # Metodo 2 escritura en .wav
+write('handel_inversa_2.wav', frate, fftinv)
 
 print('Programa finalizado con éxito')
